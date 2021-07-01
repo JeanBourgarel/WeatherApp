@@ -16,7 +16,7 @@ const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
 /* TODO
 -fragment home
--fragment city weather
+-fragment next days
 -check internet permission
 -handle build types
 -unit tests
