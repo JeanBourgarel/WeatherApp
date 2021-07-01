@@ -14,6 +14,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
+/* TODO
+-fragment home
+-fragment city weather
+-check internet permission
+-handle build types
+-unit tests
+ */
+
 val cities = mutableListOf(
     Triple("Nantes", 47.1667, -1.5833),
     Triple("Quimper", 47.9960325, -4.1024782),
