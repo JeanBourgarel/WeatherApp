@@ -2,12 +2,12 @@ package com.weather.home
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,8 +23,8 @@ import io.uniflow.core.flow.data.UIEvent
 import io.uniflow.core.flow.data.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -41,38 +41,35 @@ sealed class HomeEvent : UIEvent() {
 class HomeViewModel: AndroidDataFlow() {
     init {
         action {
+            val listWeather: MutableList<WeatherApiJSON> = mutableListOf()
             setState(FetchingData)
-            for (city in cities) {
-                makeApiRequest(city)
-                /*
-                data += makeApiRequest
-                sendEvent(FetchingFinished(data)
-                 */
+            GlobalScope.launch(Dispatchers.IO) {
+                for (city in cities) {
+                    val result = withContext(Dispatchers.Default) {
+                        makeApiRequest(city)
+                    }
+                    if (result != null) {
+                        listWeather.add(result)
+                    }
+                }
+                setState(Idle)
+                sendEvent(HomeEvent.FetchingFinished(listWeather))
             }
-            setState(Idle)
         }
     }
 
-    private suspend fun makeApiRequest(city: Triple<String, Double, Double>) {
-        lateinit var ret: WeatherApiJSON
+    private suspend fun makeApiRequest(city: Triple<String, Double, Double>): WeatherApiJSON? {
         val api = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(APIRequest::class.java)
 
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val response: WeatherApiJSON = api.getWeather(city.second, city.third)
-
-                ret = response
-                for ((i, day) in response.daily.withIndex()) {
-                    Log.i("MainActivity", city.first + " " + i.toString() + ": " + day.weather[0].description)
-                }
-                Log.i("MainActivity", response.daily[0].weather[0].description)
-            } catch(e: Exception) {
-                Log.e("MainActivity", e.toString())
-            }
+        return try {
+            api.getWeather(city.second, city.third)
+        } catch(e: Exception) {
+            Log.e("MainActivity", e.toString())
+            null
         }
     }
 
@@ -116,7 +113,7 @@ class HomeFragment: Fragment() {
                     Toast.makeText(context, event.data, Toast.LENGTH_SHORT).show()
                 }
                 is HomeEvent.FetchingFinished -> {
-                    //event.data[0].
+                    println(event.data.size)
                 }
             }
         }
