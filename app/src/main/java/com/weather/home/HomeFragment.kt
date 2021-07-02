@@ -10,13 +10,11 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.weather.APIRequest
 import com.weather.BASE_URL
-import com.weather.R
 import com.weather.api.WeatherApiJSON
 import com.weather.cities
 import com.weather.databinding.FragmentHomeBinding
 import io.uniflow.android.AndroidDataFlow
 import io.uniflow.android.livedata.onEvents
-import io.uniflow.android.livedata.onStates
 import io.uniflow.core.flow.data.UIEvent
 import io.uniflow.core.flow.data.UIState
 import kotlinx.coroutines.Dispatchers
@@ -88,6 +86,7 @@ class HomeFragment: Fragment() {
         onEvents(HomeViewModel) { event ->
             when (event) {
                 is HomeEvent.ClickOnItem -> {
+                    findNavController().navigate(HomeFragmentDirections.launchNextDaysFragment())
                     Toast.makeText(context, event.data, Toast.LENGTH_SHORT).show()
                 }
             }
