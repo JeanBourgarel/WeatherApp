@@ -38,29 +38,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.i("MainActivity", "oncreate!!")
-        for (city in cities) {
-            makeApiRequest(city)
-        }
-    }
-
-    private fun makeApiRequest(city: Triple<String, Double, Double>) {
-        val api = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(APIRequest::class.java)
-
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val response: WeatherApiJSON = api.getWeather(city.second, city.third)
-                for ((i, day) in response.daily.withIndex()) {
-                    Log.i("MainActivity", city.first + " " + i.toString() + ": " + day.weather[0].description)
-                }
-                Log.i("MainActivity", "Successs!!")
-                Log.i("MainActivity", response.daily[0].weather[0].description)
-            } catch(e: Exception) {
-                Log.e("MainActivity", e.toString())
-            }
-        }
     }
 }
