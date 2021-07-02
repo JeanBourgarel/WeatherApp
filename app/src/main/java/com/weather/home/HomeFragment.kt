@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.weather.APIRequest
 import com.weather.BASE_URL
@@ -15,6 +16,7 @@ import com.weather.cities
 import com.weather.databinding.FragmentHomeBinding
 import io.uniflow.android.AndroidDataFlow
 import io.uniflow.android.livedata.onEvents
+import io.uniflow.android.livedata.onStates
 import io.uniflow.core.flow.data.UIEvent
 import io.uniflow.core.flow.data.UIState
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +37,7 @@ sealed class HomeEvent : UIEvent() {
 class HomeViewModel: AndroidDataFlow() {
     init {
         action {
+            println("ACTION")
             setState(FetchingData)
             for (city in cities) {
                 makeApiRequest(city)
@@ -56,7 +59,6 @@ class HomeViewModel: AndroidDataFlow() {
                 for ((i, day) in response.daily.withIndex()) {
                     Log.i("MainActivity", city.first + " " + i.toString() + ": " + day.weather[0].description)
                 }
-                Log.i("MainActivity", "Successs!!")
                 Log.i("MainActivity", response.daily[0].weather[0].description)
             } catch(e: Exception) {
                 Log.e("MainActivity", e.toString())
@@ -75,6 +77,7 @@ class HomeFragment: Fragment() {
 
     private val HomeViewModel: HomeViewModel by inject()
     lateinit var binding: FragmentHomeBinding
+    lateinit var weatherData: WeatherApiJSON
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHomeBinding.inflate(inflater)
@@ -83,6 +86,18 @@ class HomeFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onStates(HomeViewModel) { state ->
+            when (state) {
+                is FetchingData -> {
+                    Log.d("MainActivity", "testfetch")
+                    binding.progressBar.isVisible = true
+                }
+                is Idle -> {
+                    binding.progressBar.isVisible = false
+                }
+            }
+
+        }
         onEvents(HomeViewModel) { event ->
             when (event) {
                 is HomeEvent.ClickOnItem -> {
