@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.weather.APIRequest
 import com.weather.BASE_URL
 import com.weather.api.WeatherApiJSON
@@ -21,6 +23,7 @@ import io.uniflow.core.flow.data.UIEvent
 import io.uniflow.core.flow.data.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import retrofit2.Retrofit
@@ -32,21 +35,26 @@ object Idle: HomeState()
 
 sealed class HomeEvent : UIEvent() {
     data class ClickOnItem(val data: String) : HomeEvent()
+    data class FetchingFinished(val data: MutableList<WeatherApiJSON>) : HomeEvent()
 }
 
 class HomeViewModel: AndroidDataFlow() {
     init {
         action {
-            println("ACTION")
             setState(FetchingData)
             for (city in cities) {
                 makeApiRequest(city)
+                /*
+                data += makeApiRequest
+                sendEvent(FetchingFinished(data)
+                 */
             }
             setState(Idle)
         }
     }
 
-    private fun makeApiRequest(city: Triple<String, Double, Double>) {
+    private suspend fun makeApiRequest(city: Triple<String, Double, Double>) {
+        lateinit var ret: WeatherApiJSON
         val api = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -56,6 +64,8 @@ class HomeViewModel: AndroidDataFlow() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val response: WeatherApiJSON = api.getWeather(city.second, city.third)
+
+                ret = response
                 for ((i, day) in response.daily.withIndex()) {
                     Log.i("MainActivity", city.first + " " + i.toString() + ": " + day.weather[0].description)
                 }
@@ -77,7 +87,8 @@ class HomeFragment: Fragment() {
 
     private val HomeViewModel: HomeViewModel by inject()
     lateinit var binding: FragmentHomeBinding
-    lateinit var weatherData: WeatherApiJSON
+    lateinit var weatherData: MutableList<WeatherApiJSON>
+    lateinit var recyclerView : RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHomeBinding.inflate(inflater)
@@ -104,12 +115,19 @@ class HomeFragment: Fragment() {
                     findNavController().navigate(HomeFragmentDirections.launchNextDaysFragment())
                     Toast.makeText(context, event.data, Toast.LENGTH_SHORT).show()
                 }
+                is HomeEvent.FetchingFinished -> {
+                    //event.data[0].
+                }
             }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        //recyclerView.adapter = GamesAdapter(games, context!!)
+
         binding.tv1.setOnClickListener {
             HomeViewModel.clickOnItem("test")
         }
