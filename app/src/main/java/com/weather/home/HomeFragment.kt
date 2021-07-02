@@ -113,6 +113,7 @@ class HomeFragment: Fragment() {
                     Toast.makeText(context, event.data, Toast.LENGTH_SHORT).show()
                 }
                 is HomeEvent.FetchingFinished -> {
+                    recyclerView.adapter = WeatherAdapter(event.data)
                     println(event.data.size)
                 }
             }
