@@ -11,6 +11,8 @@ import com.weather.R
 import com.weather.api.WeatherApiJSON
 import com.weather.databinding.FragmentHomeBinding
 import io.uniflow.android.AndroidDataFlow
+import io.uniflow.android.livedata.onEvents
+import io.uniflow.android.livedata.onStates
 import io.uniflow.core.flow.data.UIEvent
 import io.uniflow.core.flow.data.UIState
 import org.koin.android.ext.android.inject
@@ -21,7 +23,8 @@ object Idle: HomeState()
 data class Result(val data: String) : HomeState()
 
 sealed class HomeEvent : UIEvent() {
-    data class ClickOnItem(val data: WeatherApiJSON) : HomeEvent()
+    data class ClickOnItem(val data: String) : HomeEvent()
+    object fart: HomeEvent()
 //    data class ClickOnItem(val holder: PlayerCardHolder) : HomeEvent()
 }
 
@@ -44,7 +47,7 @@ class HomeViewModel: AndroidDataFlow() {
         }
     }
 
-    fun clickOnItem(data: WeatherApiJSON) {
+    fun clickOnItem(data: String) {
         action {
             sendEvent(HomeEvent.ClickOnItem(data))
         }
@@ -53,7 +56,7 @@ class HomeViewModel: AndroidDataFlow() {
 
 class HomeFragment: Fragment() {
 
-    val HomeViewModel: HomeViewModel by inject()
+    private val HomeViewModel: HomeViewModel by inject()
     lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,12 +66,15 @@ class HomeFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onEvents(HomeViewModel) { event ->
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tv1.setOnClickListener {
-            Toast.makeText(context, "test", Toast.LENGTH_SHORT).show()
+            HomeViewModel.clickOnItem("geh")
+//            Toast.makeText(context, "test", Toast.LENGTH_SHORT).show()
         }
 /*        binding.newGame.onClick {
             findNavController().navigate(HomeFragmentDirections.launchSelectPlayersFragment())
