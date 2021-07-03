@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.weather.api.WeatherApiJSON
 import com.weather.databinding.FragmentWeatherNextDaysBinding
+import com.weather.home.WeatherAdapter
 import com.weather.timeconverter.TimeConverter
 import io.uniflow.android.AndroidDataFlow
 import org.koin.android.ext.android.inject
@@ -33,8 +36,9 @@ class WeatherNextDaysFragment() : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val data = arguments?.getSerializable("data") as WeatherApiJSON;
-        val dateString = TimeConverter().getDateFromTime(1625313600)
-        binding.tvtest.text = dateString
+        binding.recyclerView2.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerView2.adapter = WeatherNextDaysAdapter(data, requireContext())
+
         //val cardHolder = arguments?.getSerializable("cardHolder") as PlayerCardHolder;
     }
 }
