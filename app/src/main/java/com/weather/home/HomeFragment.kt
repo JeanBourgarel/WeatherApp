@@ -49,6 +49,7 @@ class HomeViewModel: AndroidDataFlow() {
                         makeApiRequest(city)
                     }
                     if (result != null) {
+                        result.city_name = city.first
                         listWeather.add(result)
                     }
                 }
@@ -113,7 +114,7 @@ class HomeFragment: Fragment() {
                     Toast.makeText(context, event.data, Toast.LENGTH_SHORT).show()
                 }
                 is HomeEvent.FetchingFinished -> {
-                    recyclerView.adapter = WeatherAdapter(event.data)
+                    recyclerView.adapter = WeatherAdapter(event.data, requireContext())
                     println(event.data.size)
                 }
             }
@@ -126,8 +127,8 @@ class HomeFragment: Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         //recyclerView.adapter = GamesAdapter(games, context!!)
 
-        binding.tv1.setOnClickListener {
+/*        binding.tv1.setOnClickListener {
             HomeViewModel.clickOnItem("test")
-        }
+        }*/
     }
 }
