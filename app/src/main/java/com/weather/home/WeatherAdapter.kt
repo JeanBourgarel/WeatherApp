@@ -1,17 +1,15 @@
 package com.weather.home
 
 import android.content.Context
-import android.widget.TextView
-import com.weather.R
-import com.weather.api.WeatherApiJSON
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.weather.R
+import com.weather.api.WeatherApiJSON
 
 
 class WeatherAdapter(val data: MutableList<WeatherApiJSON>, val context: Context, val listener: IWeatherRecycler) : RecyclerView.Adapter<WeatherViewHolder>() {
@@ -43,7 +41,12 @@ class WeatherAdapter(val data: MutableList<WeatherApiJSON>, val context: Context
             holder.listener.clickOnWeather(weather)
         }
 
+        val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+        animation.startOffset = animation.startOffset + position * 200
+        holder.view.startAnimation(animation)
+
     }
+
     interface IWeatherRecycler {
         fun clickOnWeather(weather: WeatherApiJSON)
     }
