@@ -14,19 +14,19 @@ import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 
 
-class WeatherAdapter(val data: MutableList<WeatherApiJSON>, val context: Context) : RecyclerView.Adapter<GamesViewHolder>() {
+class WeatherAdapter(val data: MutableList<WeatherApiJSON>, val context: Context, val listener: IWeatherRecycler) : RecyclerView.Adapter<WeatherViewHolder>() {
 
     override fun getItemCount(): Int {
         return data.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GamesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.weather_row, parent, false)
-        return GamesViewHolder(cellForRow)
+        return WeatherViewHolder(cellForRow, listener)
     }
 
-    override fun onBindViewHolder(holder: GamesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
         val weather = data[position]
 
         holder.city_name.text = weather.city_name
@@ -39,11 +39,17 @@ class WeatherAdapter(val data: MutableList<WeatherApiJSON>, val context: Context
         val img = context.resources.getIdentifier(fileName, "drawable", context.packageName)
         holder.image_weather.setImageResource(img)
 
-        //holder.city_name.text = weather.daily[0].weather[0].description
+        holder.view.setOnClickListener {
+            holder.listener.clickOnWeather(weather)
+        }
+
+    }
+    interface IWeatherRecycler {
+        fun clickOnWeather(weather: WeatherApiJSON)
     }
 }
 
-class GamesViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+class WeatherViewHolder(val view: View, val listener: WeatherAdapter.IWeatherRecycler): RecyclerView.ViewHolder(view) {
     var image_weather: AppCompatImageView = view.findViewById(R.id.imageview_weather)
     var city_name: TextView = view.findViewById(R.id.textview_city_name)
     var temperature: TextView = view.findViewById(R.id.textview_temperature)

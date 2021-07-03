@@ -34,7 +34,7 @@ object FetchingData: HomeState()
 object Idle: HomeState()
 
 sealed class HomeEvent : UIEvent() {
-    data class ClickOnItem(val data: String) : HomeEvent()
+    data class ClickOnItem(val data: WeatherApiJSON) : HomeEvent()
     data class FetchingFinished(val data: MutableList<WeatherApiJSON>) : HomeEvent()
 }
 
@@ -74,14 +74,14 @@ class HomeViewModel: AndroidDataFlow() {
         }
     }
 
-    fun clickOnItem(data: String) {
+    fun clickOnItem(data: WeatherApiJSON) {
         action {
             sendEvent(HomeEvent.ClickOnItem(data))
         }
     }
 }
 
-class HomeFragment: Fragment() {
+class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
 
     private val HomeViewModel: HomeViewModel by inject()
     lateinit var binding: FragmentHomeBinding
@@ -110,11 +110,11 @@ class HomeFragment: Fragment() {
         onEvents(HomeViewModel) { event ->
             when (event) {
                 is HomeEvent.ClickOnItem -> {
-                    findNavController().navigate(HomeFragmentDirections.launchNextDaysFragment())
-                    Toast.makeText(context, event.data, Toast.LENGTH_SHORT).show()
+                    //findNavController().navigate(HomeFragmentDirections.launchNextDaysFragment())
+                    Toast.makeText(context, event.data.city_name, Toast.LENGTH_SHORT).show()
                 }
                 is HomeEvent.FetchingFinished -> {
-                    recyclerView.adapter = WeatherAdapter(event.data, requireContext())
+                    recyclerView.adapter = WeatherAdapter(event.data, requireContext(), this)
                     println(event.data.size)
                 }
             }
@@ -130,5 +130,9 @@ class HomeFragment: Fragment() {
 /*        binding.tv1.setOnClickListener {
             HomeViewModel.clickOnItem("test")
         }*/
+    }
+
+    override fun clickOnWeather(weather: WeatherApiJSON) {
+        HomeViewModel.clickOnItem(weather)
     }
 }
