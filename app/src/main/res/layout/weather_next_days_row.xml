@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:gravity="end|center_vertical"
         android:text="samedi 3 juillet 2021"
-        android:textSize="20sp"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageview_weather"
-        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.235" />
+        app:layout_constraintVertical_bias="0.195" />
 
     <TextView
         android:id="@+id/textview_temperature"
@@ -27,14 +27,14 @@
         android:layout_height="wrap_content"
         android:gravity="end|center_vertical"
         android:text="26°"
-        android:textSize="24sp"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_city_name"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_date"
+        app:layout_constraintVertical_bias="0.631" />
 
     <TextView
         android:id="@+id/textview_description"
@@ -42,19 +42,19 @@
         android:layout_height="wrap_content"
         android:gravity="end|center_vertical"
         android:text="Pluvieux"
-        android:textSize="20sp"
+        android:textSize="10sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageview_weather"
-        app:layout_constraintHorizontal_bias="0.788"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.624"
+        app:layout_constraintStart_toEndOf="@+id/textview_date"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.506" />
+        app:layout_constraintVertical_bias="0.652" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageview_weather"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

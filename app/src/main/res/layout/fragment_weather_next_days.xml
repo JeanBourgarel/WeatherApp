@@ -5,18 +5,17 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <TextView
-        android:id="@+id/tvtest"
+        android:id="@+id/textview_city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.125" />
+        android:text="Nantes"
+        app:layout_constraintVertical_bias="0.022" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
@@ -25,5 +24,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvtest" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_city_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

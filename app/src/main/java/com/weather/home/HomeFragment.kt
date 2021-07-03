@@ -20,7 +20,6 @@ import com.weather.api.WeatherApiJSON
 import com.weather.cities
 import com.weather.databinding.FragmentHomeBinding
 import com.weather.nextdays.WeatherNextDaysFragment
-import com.weather.nextdays.WeatherNextDaysViewModel
 import com.weather.timeconverter.TimeConverter
 import io.uniflow.android.AndroidDataFlow
 import io.uniflow.android.livedata.onEvents
@@ -123,13 +122,6 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
         onEvents(HomeViewModel) { event ->
             when (event) {
                 is HomeEvent.ClickOnItem -> {
-                    //findNavController().navigate(HomeFragmentDirections.launchNextDaysFragment())
-                    Toast.makeText(context, event.data.city_name, Toast.LENGTH_SHORT).show()
-/*                    val args = Bundle()
-                    args.putSerializable("cardHolder", event.holder)
-                    args.putSerializable("game", game)
-                    killPlayerCardDialog.arguments = args
-                    killPlayerCardDialog.show(childFragmentManager, "killPlayerCardFragment")*/
                     val args = Bundle()
                     args.putSerializable("data", event.data)
                     WeatherNextDaysDialog.arguments = args
