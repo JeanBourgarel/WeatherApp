@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.weather.R
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +19,7 @@ import com.weather.BASE_URL
 import com.weather.api.WeatherApiJSON
 import com.weather.cities
 import com.weather.databinding.FragmentHomeBinding
+import com.weather.nextdays.NextDaysFragment
 import io.uniflow.android.AndroidDataFlow
 import io.uniflow.android.livedata.onEvents
 import io.uniflow.android.livedata.onStates
@@ -89,6 +93,9 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
     lateinit var recyclerView : RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        if (this::weatherData.isInitialized) {
+            recyclerView.adapter = WeatherAdapter(weatherData, requireContext(), this)
+        }
         binding = FragmentHomeBinding.inflate(inflater)
         return binding.root
     }
@@ -96,6 +103,8 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onStates(HomeViewModel) { state ->
+/*            println("MAGIEEEEEEEE")
+            println(state)*/
             when (state) {
                 is FetchingData -> {
                     Log.d("MainActivity", "testfetch")
@@ -114,7 +123,8 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
                     Toast.makeText(context, event.data.city_name, Toast.LENGTH_SHORT).show()
                 }
                 is HomeEvent.FetchingFinished -> {
-                    recyclerView.adapter = WeatherAdapter(event.data, requireContext(), this)
+                    weatherData = event.data
+                    recyclerView.adapter = WeatherAdapter(weatherData, requireContext(), this)
                     println(event.data.size)
                 }
             }
