@@ -12,7 +12,7 @@ Tapping on an item will open a dialog containing the same weather informations f
 
 ## Cities
 
-Each city displayed in the app is set in MainActivity.kt. If you'd like to add other cities, add another Triple instances and give the city name, latitude and longitude as parameters.
+Each city displayed in the app is set in MainActivity.kt. If you'd like to add other cities, add new Triple instances for the 'cities' variable and give the city name, latitude and longitude as parameters.
 
 ```kotlin
 val cities = mutableListOf(
