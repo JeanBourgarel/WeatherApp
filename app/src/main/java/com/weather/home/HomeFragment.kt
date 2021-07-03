@@ -19,7 +19,9 @@ import com.weather.BASE_URL
 import com.weather.api.WeatherApiJSON
 import com.weather.cities
 import com.weather.databinding.FragmentHomeBinding
-import com.weather.nextdays.NextDaysFragment
+import com.weather.nextdays.WeatherNextDaysFragment
+import com.weather.nextdays.WeatherNextDaysViewModel
+import com.weather.timeconverter.TimeConverter
 import io.uniflow.android.AndroidDataFlow
 import io.uniflow.android.livedata.onEvents
 import io.uniflow.android.livedata.onStates
@@ -32,6 +34,9 @@ import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 sealed class HomeState : UIState()
 object FetchingData: HomeState()
@@ -90,6 +95,7 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
     private val HomeViewModel: HomeViewModel by inject()
     lateinit var binding: FragmentHomeBinding
     lateinit var weatherData: MutableList<WeatherApiJSON>
+    private val WeatherNextDaysDialog = WeatherNextDaysFragment()
     lateinit var recyclerView : RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -103,8 +109,6 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onStates(HomeViewModel) { state ->
-/*            println("MAGIEEEEEEEE")
-            println(state)*/
             when (state) {
                 is FetchingData -> {
                     Log.d("MainActivity", "testfetch")
@@ -121,6 +125,16 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
                 is HomeEvent.ClickOnItem -> {
                     //findNavController().navigate(HomeFragmentDirections.launchNextDaysFragment())
                     Toast.makeText(context, event.data.city_name, Toast.LENGTH_SHORT).show()
+/*                    val args = Bundle()
+                    args.putSerializable("cardHolder", event.holder)
+                    args.putSerializable("game", game)
+                    killPlayerCardDialog.arguments = args
+                    killPlayerCardDialog.show(childFragmentManager, "killPlayerCardFragment")*/
+                    val args = Bundle()
+                    args.putSerializable("data", event.data)
+                    WeatherNextDaysDialog.arguments = args
+                    WeatherNextDaysDialog.show(childFragmentManager, "WeatherNextDaysFragment")
+
                 }
                 is HomeEvent.FetchingFinished -> {
                     weatherData = event.data
@@ -135,11 +149,6 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        //recyclerView.adapter = GamesAdapter(games, context!!)
-
-/*        binding.tv1.setOnClickListener {
-            HomeViewModel.clickOnItem("test")
-        }*/
     }
 
     override fun clickOnWeather(weather: WeatherApiJSON) {

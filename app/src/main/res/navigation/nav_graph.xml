@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/nextDaysFragment"
-        android:name="com.weather.nextdays.NextDaysFragment"
+        android:name="com.weather.nextdays.WeatherNextDays"
         android:label="fragment_next_days"
-        tools:layout="@layout/fragment_next_days" />
+        tools:layout="@layout/fragment_weather_next_days" />
 </navigation>
