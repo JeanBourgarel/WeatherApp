@@ -100,12 +100,8 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
     lateinit var binding: FragmentHomeBinding
     lateinit var weatherData: MutableList<WeatherApiJSON>
     private val WeatherNextDaysDialog = WeatherNextDaysFragment()
-    lateinit var recyclerView : RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        if (this::weatherData.isInitialized) {
-            recyclerView.adapter = WeatherAdapter(weatherData, requireContext(), this)
-        }
         binding = FragmentHomeBinding.inflate(inflater)
         return binding.root
     }
@@ -138,7 +134,7 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
                 }
                 is HomeEvent.FetchingFinished -> {
                     weatherData = event.data
-                    recyclerView.adapter = WeatherAdapter(weatherData, requireContext(), this)
+                    binding.recyclerView.adapter = WeatherAdapter(weatherData, requireContext(), this)
                     println(event.data.size)
                 }
             }
@@ -147,8 +143,7 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
     }
 
     override fun clickOnWeather(weather: WeatherApiJSON) {
