@@ -6,6 +6,8 @@ I used the [https://openweathermap.org/api](https://openweathermap.org/api) with
 
 ## Features
 
+At first, the app retrieves data from the API and displays a circular progress bar. At the end of the requests, if it went good, the app will show the data retrieved, otherwise it will display a toast containing an error message.
+
 The app shows a list of items containing : the city name, the city day temperature in degrees Celcius, a description of the day weather in french and an icon.
 
 Tapping on an item will open a dialog containing the same weather informations for the next week according to the city of the item.
