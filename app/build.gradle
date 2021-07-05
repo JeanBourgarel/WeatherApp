@@ -5,6 +5,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/home/jbourgarel/my_bordel/appkeys/keyrelease.jks')
+            storePassword '123456789'
+            keyAlias 'keyrelease'
+            keyPassword '123456789'
+        }
+    }
     compileSdkVersion 30
 
     defaultConfig {
@@ -21,7 +29,7 @@ android {
         debug {
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
-            manifestPlaceholders = [appName: "Weatherapp-Debug"]
+            manifestPlaceholders = [appName: "Weatherapp-debug"]
         }
         release {
             minifyEnabled false
@@ -29,9 +37,11 @@ android {
             manifestPlaceholders = [appName: "Weatherapp"]
         }
 
-        customBuild {
-            debuggable true
-            manifestPlaceholders = [appName: "Weatherapp-customBuild"]
+        custom {
+            initWith debug
+            versionNameSuffix ".custom"
+            manifestPlaceholders = [appName: "Weatherapp"]
+            debuggable false
         }
     }
 
