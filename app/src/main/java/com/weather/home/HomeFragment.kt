@@ -6,22 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.weather.R
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.weather.APIRequest
 import com.weather.BASE_URL
 import com.weather.api.WeatherApiJSON
 import com.weather.cities
 import com.weather.databinding.FragmentHomeBinding
 import com.weather.nextdays.WeatherNextDaysFragment
-import com.weather.timeconverter.TimeConverter
 import io.uniflow.android.AndroidDataFlow
 import io.uniflow.android.livedata.onEvents
 import io.uniflow.android.livedata.onStates
@@ -34,9 +27,6 @@ import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.util.*
 
 sealed class HomeState : UIState()
 object FetchingData: HomeState()

@@ -3,14 +3,6 @@ package com.weather
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.weather.APIRequest
-import com.weather.api.WeatherApiJSON
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
 
 const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 

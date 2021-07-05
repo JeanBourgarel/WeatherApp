@@ -7,10 +7,7 @@ import com.weather.api.WeatherApiJSON
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.timeconverter.TimeConverter
 
