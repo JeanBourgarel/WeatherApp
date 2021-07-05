@@ -83,7 +83,6 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
         onStates(HomeViewModel) { state ->
             when (state) {
                 is FetchingData -> {
-                    Log.d("MainActivity", "testfetch")
                     binding.progressBar.isVisible = true
                 }
                 is Idle -> {
