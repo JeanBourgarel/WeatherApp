@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.weather.R
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -44,6 +45,7 @@ object Idle: HomeState()
 sealed class HomeEvent : UIEvent() {
     data class ClickOnItem(val data: WeatherApiJSON) : HomeEvent()
     data class FetchingFinished(val data: MutableList<WeatherApiJSON>) : HomeEvent()
+    object FetchingFailed: HomeEvent()
 }
 
 class HomeViewModel: AndroidDataFlow() {
@@ -60,6 +62,9 @@ class HomeViewModel: AndroidDataFlow() {
                         result.city_name = city.first
                         listWeather.add(result)
                     }
+                }
+                if (listWeather.size != cities.size) {
+                    sendEvent(HomeEvent.FetchingFailed)
                 }
                 setState(Idle)
                 sendEvent(HomeEvent.FetchingFinished(listWeather))
@@ -97,7 +102,7 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
     private val WeatherNextDaysDialog = WeatherNextDaysFragment()
     lateinit var recyclerView : RecyclerView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         if (this::weatherData.isInitialized) {
             recyclerView.adapter = WeatherAdapter(weatherData, requireContext(), this)
         }
@@ -127,6 +132,9 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
                     WeatherNextDaysDialog.arguments = args
                     WeatherNextDaysDialog.show(childFragmentManager, "WeatherNextDaysFragment")
 
+                }
+                is HomeEvent.FetchingFailed -> {
+                    Toast.makeText(requireContext(), "Unable to get weather for some cities, check your internet connection and restart the app.", Toast.LENGTH_LONG).show()
                 }
                 is HomeEvent.FetchingFinished -> {
                     weatherData = event.data
