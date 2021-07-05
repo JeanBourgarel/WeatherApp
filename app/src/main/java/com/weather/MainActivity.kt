@@ -6,11 +6,6 @@ import android.util.Log
 
 const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
-/* TODO
--handle build types
--unit tests
- */
-
 val cities = mutableListOf(
     Triple("Nantes", 47.1667, -1.5833),
     Triple("Quimper", 47.9960325, -4.1024782),

@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.weather.APIRequest
-import com.weather.BASE_URL
 import com.weather.api.WeatherApiJSON
 import com.weather.api.makeApiRequest
 import com.weather.cities
@@ -26,8 +24,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 sealed class HomeState : UIState()
 object FetchingData: HomeState()
@@ -99,6 +95,7 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
         onEvents(HomeViewModel) { event ->
             when (event) {
                 is HomeEvent.ClickOnItem -> {
+                    Log.d("MainActivity", "item clicked")
                     val args = Bundle()
                     args.putSerializable("data", event.data)
                     WeatherNextDaysDialog.arguments = args
@@ -106,12 +103,13 @@ class HomeFragment: Fragment(), WeatherAdapter.IWeatherRecycler {
 
                 }
                 is HomeEvent.FetchingFailed -> {
+                    Log.d("MainActivity", "fetching failed")
                     Toast.makeText(requireContext(), "Unable to get weather for some cities, check your internet connection and restart the app.", Toast.LENGTH_LONG).show()
                 }
                 is HomeEvent.FetchingFinished -> {
+                    Log.d("MainActivity", "fetching finished")
                     weatherData = event.data
                     binding.recyclerView.adapter = WeatherAdapter(weatherData, requireContext(), this)
-                    println(event.data.size)
                 }
             }
         }
