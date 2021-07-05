@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.api.WeatherApiJSON
 import com.weather.databinding.FragmentWeatherNextDaysBinding
 
-class WeatherNextDaysFragment() : DialogFragment() {
+class WeatherNextDaysFragment : DialogFragment() {
 
     lateinit var binding: FragmentWeatherNextDaysBinding
 
