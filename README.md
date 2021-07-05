@@ -3,6 +3,7 @@
 
 This application displays different french cities today's weather, and their respective upcoming weather for the next week.
 I used the [https://openweathermap.org/api](https://openweathermap.org/api) with the GET [/onecall](https://api.openweathermap.org/data/2.5/onecall) endpoint.
+There are two usable build variants : custom and debug.
 
 ## Features
 
