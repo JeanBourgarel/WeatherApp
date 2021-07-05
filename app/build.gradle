@@ -21,12 +21,17 @@ android {
         debug {
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
-            manifestPlaceholders = [appName: "Debug"]
+            manifestPlaceholders = [appName: "Weatherapp-Debug"]
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [appName: "Weatherapp"]
+        }
+
+        customBuild {
+            debuggable true
+            manifestPlaceholders = [appName: "Weatherapp-customBuild"]
         }
     }
 
