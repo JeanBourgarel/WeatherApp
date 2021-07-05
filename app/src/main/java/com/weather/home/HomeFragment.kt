@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.APIRequest
 import com.weather.BASE_URL
 import com.weather.api.WeatherApiJSON
+import com.weather.api.makeApiRequest
 import com.weather.cities
 import com.weather.databinding.FragmentHomeBinding
 import com.weather.nextdays.WeatherNextDaysFragment
@@ -59,21 +60,6 @@ class HomeViewModel: AndroidDataFlow() {
                 setState(Idle)
                 sendEvent(HomeEvent.FetchingFinished(listWeather))
             }
-        }
-    }
-
-    private suspend fun makeApiRequest(city: Triple<String, Double, Double>): WeatherApiJSON? {
-        val api = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(APIRequest::class.java)
-
-        return try {
-            api.getWeather(city.second, city.third)
-        } catch(e: Exception) {
-            Log.e("MainActivity", e.toString())
-            null
         }
     }
 
